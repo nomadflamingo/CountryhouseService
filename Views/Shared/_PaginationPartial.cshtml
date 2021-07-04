@@ -1,0 +1,15 @@
+﻿<cs-pager cs-paging-pagenumber="@Model.Ads.PageNumber"
+          cs-paging-totalitems="@Model.Ads.TotalItems"
+          cs-paging-pagesize="@Model.Ads.PageSize"
+          cs-pagenumber-param="page"
+          asp-controller=@ViewData["Controller"]
+          asp-action=@ViewData["Action"]
+          asp-route-sortBy="@Model.CurrentSortOrder"
+          asp-route-searchString="@Model.CurrentSearchString"
+          asp-route-showCurrentUserData="@Model.ShowCurrentUserData"
+          cs-pager-li-current-class="page-item active"
+          cs-pager-li-other-class="page-item"
+          cs-pager-li-non-active-class="page-item disabled"
+          cs-pager-link-current-class="page-link"
+          cs-pager-link-other-class="page-link"
+></cs-pager>

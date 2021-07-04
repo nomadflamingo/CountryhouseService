@@ -1,0 +1,34 @@
+﻿@model CountryhouseService.ViewModels.AdPagedResult
+@{
+    ViewData["Title"] = Model.Ad.Title;
+}
+<input hidden id="is-current-user" value="@Model.IsCurrentUserAd" />
+<h1>@Model.Ad.Title</h1>
+<p>@Model.Ad.Description</p>
+<a asp-controller="Users" asp-action="Profile" asp-route-userId="@Model.Ad.AuthorId">@Model.Ad.Author.FirstName @Model.Ad.Author.LastName</a>
+<p>@Model.Ad.Budget</p>
+<p>@Model.Ad.UpdatedOn.ToShortDateString()</p>
+<p>@Model.Ad.CreatedOn.ToShortDateString()</p>
+@foreach (Image img in Model.Ad.Images)
+{
+	<p>
+		<img src="@img.Source" />
+	</p>
+}
+<a hidden class="btn btn-primary" id="edit-button" asp-controller="Ads" asp-action="Edit" asp-route-id="@Model.Ad.Id">Edit</a>
+<a hidden class="btn btn-danger" id="delete-button" asp-controller="Ads" asp-action="Delete" asp-route-id="@Model.Ad.Id">Delete</a>
+
+@section Scripts {
+    <script>
+		$(document).ready(function () {
+			var isCurrentUser = $("#is-current-user").val();
+			if (isCurrentUser == "true") {
+				$("#edit-button").removeAttr("hidden");
+				$("#delete-button").removeAttr("hidden");
+			}
+        })
+    </script>
+}
+
+
+

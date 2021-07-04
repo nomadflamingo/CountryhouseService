@@ -1,0 +1,80 @@
+﻿@model CountryhouseService.ViewModels.EditAdViewModel
+@{
+	ViewData["Title"] = "Create";
+	string isSuccess = TempData["isSuccess"] as string;
+}
+
+<h1>Edit</h1>
+<input hidden id="isSuccess" value="@isSuccess" />
+<div hidden id="successInfo" class="alert alert-success" role="alert">
+	<h4 class="alert-heading">Your ad has been updated successfully!</h4>
+	<hr>
+	<a href="@Model.Id">Click here to see it</a>
+</div>
+<form asp-action="Edit" enctype="multipart/form-data" method="post">
+	<div class="form-group">
+		<label asp-for="Title"></label>
+		<input asp-for="Title" class="form-control">
+		<span asp-validation-for="Title" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Description"></label>
+		<textarea asp-for="Description" class="form-control" rows="3"></textarea>
+		<span asp-validation-for="Description" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Address"></label>
+		<input asp-for="Address" class="form-control">
+		<span asp-validation-for="Address" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Budget"></label>
+		<div class="input-group">
+			<div class="input-group-prepend">
+				<span class="input-group-text">$</span>
+			</div>
+			<input asp-for="Budget" class="form-control" />
+		</div>
+		<span asp-validation-for="Budget" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="ContactNumber"></label>
+		<input asp-for="ContactNumber" class="form-control">
+		<span asp-validation-for="ContactNumber" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="FromDate"></label>
+		<input asp-for="FromDate" class="form-control">
+		<span asp-validation-for="FromDate" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="UntilDate"></label>
+		<input asp-for="UntilDate" class="form-control">
+		<span asp-validation-for="UntilDate" class="text-danger"></span>
+	</div>
+	<div class="form-group">
+		<label asp-for="Images" class="control-label"></label>
+		<div class="custom-file">
+			<label asp-for="Images" class="custom-file-label">Choose Images</label>
+			<input asp-for="Images" class="custom-file-input" multiple>
+			<span asp-validation-for="Images" class="text-danger"></span>
+		</div>
+	</div>
+	<button type="submit" class="btn btn-primary">Edit Ad</button>
+	<a href="/Ads/@Model.Id" class="btn btn-success">Go back</a>
+</form>
+
+@section Scripts {
+	@{
+		<partial name="_ValidationScriptsPartial" />
+	}
+	<script>
+    $(document).ready(function () {
+        var isSuccess = $("#isSuccess").val();
+        if (isSuccess == "true") {
+            $("#successInfo").removeAttr("hidden");
+        }
+    })
+	</script>
+}
+
