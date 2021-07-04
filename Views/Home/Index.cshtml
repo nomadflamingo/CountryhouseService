@@ -1,8 +1,55 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<CountryhouseService.Models.Ad>
+@{
+	Layout = "~/Views/Shared/_IndexLayout.cshtml";
+	ViewData["Title"] = "Home Page";
+	string defaultPreview = Constants.DefaultAdPreviewSource;
+	string defaultLogo = Constants.DefaultLogoSource;
 }
+<style>
+	.jumbotron {
+		background-color: #fff;
+	}
+</style>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<section class="jumbotron text-center text-write my-0">
+	<div class="container d-flex align-items-center flex-column">
+		<img src="@defaultLogo" alt="..." />
+		<h1 class="jumbotron-heading">Countryhouse Service</h1>
+		<p>
+			<a href="#" class="btn btn-primary my-2">View all ads</a>
+			<a href="#" class="btn btn-secondary my-2">Sign in</a>
+		</p>
+	</div>
+</section>
+<div class="album bg-light">
+	<h2 class="text-center py-5">Most recent ads</h2>
+	<div class="container">
+		<div class="row">
+		@foreach (Ad ad in Model)
+		{
+			<div class="col-md-4">
+				<div class="card mb-4 box-shadow">
+					<div class="card-img-top" style="background-image: url('@ad.Images[0].Source'); width: 100%; height: 225px; background-repeat:no-repeat;  background-position: center;">&nbsp;</div>
+					<div class="card-body">
+						<p class="card-text">@ad.Description</p>
+						<div class="d-flex justify-content-between align-items-center">
+							<a href="/Ads/@ad.Id" type="button" class="btn btn-sm btn-outline-secondary">View</a>
+							<a href="/Users/@ad.AuthorId">@ad.Author.FirstName @ad.Author.LastName</a>
+							<small class="text-muted">@ad.CreatedOn.ToShortDateString()</small>
+						</div>
+					</div>
+				</div>
+			</div>
+		}
+		</div>
+	</div>	
 </div>
+
+@section Scripts {
+	<script>
+		$(document).ready(function () {
+			
+		})
+	</script>
+}
