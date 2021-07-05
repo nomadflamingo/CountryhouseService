@@ -10,5 +10,6 @@ namespace CountryhouseService
         public const string DefaultAdPreviewSource = "/img/app-img/ad-preview-placeholder.png";
         public const string DefaultLogoSource = "/img/app-img/main-logo.png";
         public const string DefaultAvatarSource = "/img/app-img/avatar-placeholder.png";
+        public const string HomeBackground = "/img/app-img/home-background.jpg";
     }
 }

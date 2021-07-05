@@ -38,6 +38,9 @@ namespace CountryhouseService.Models
         public List<Image> Images { get; set; }
 
         [Required]
+        public bool UseDefaultImage { get; set; }
+
+        [Required]
         public DateTime CreatedOn { get; set; }
 
         [Required]

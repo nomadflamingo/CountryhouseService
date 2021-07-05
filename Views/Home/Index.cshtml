@@ -4,21 +4,37 @@
 	ViewData["Title"] = "Home Page";
 	string defaultPreview = Constants.DefaultAdPreviewSource;
 	string defaultLogo = Constants.DefaultLogoSource;
+	string backgroundImg = Constants.HomeBackground;
 }
 <style>
 	.jumbotron {
 		background-color: #fff;
 	}
+	.card-img-top {
+		width: 100%;
+		height: 225px;
+		background-repeat: no-repeat;
+		background-size: contain;
+		background-position: center;
+	}
+	.jumbotron {
+		background-image: url('@backgroundImg');
+		background-position: center;
+		background-size:cover;
+	}
+	.jumbotron-heading {
+		color: #fff;
+	}
 </style>
 
-
+<input hidden id="is-signed-in" value="@ViewData["IsSignedIn"]"/>
 <section class="jumbotron text-center text-write my-0">
 	<div class="container d-flex align-items-center flex-column">
 		<img src="@defaultLogo" alt="..." />
 		<h1 class="jumbotron-heading">Countryhouse Service</h1>
 		<p>
-			<a href="#" class="btn btn-primary my-2">View all ads</a>
-			<a href="#" class="btn btn-secondary my-2">Sign in</a>
+			<a id="ads-list-btn" asp-controller="Ads" asp-action="Index"  class="btn btn-primary my-2">View all ads</a>
+			<a hidden id="sign-in-btn" asp-controller="Account" asp-action="SignIn" class="btn btn-secondary my-2">Sign in</a>
 		</p>
 	</div>
 </section>
@@ -28,14 +44,15 @@
 		<div class="row">
 		@foreach (Ad ad in Model)
 		{
+			if (!ad.UseDefaultImage) defaultPreview = ad.Images.FirstOrDefault().Source;
 			<div class="col-md-4">
 				<div class="card mb-4 box-shadow">
-					<div class="card-img-top" style="background-image: url('@ad.Images[0].Source'); width: 100%; height: 225px; background-repeat:no-repeat;  background-position: center;">&nbsp;</div>
+					<div class="card-img-top" style="background-image: url('@defaultPreview')">&nbsp;</div>
 					<div class="card-body">
 						<p class="card-text">@ad.Description</p>
 						<div class="d-flex justify-content-between align-items-center">
 							<a href="/Ads/@ad.Id" type="button" class="btn btn-sm btn-outline-secondary">View</a>
-							<a href="/Users/@ad.AuthorId">@ad.Author.FirstName @ad.Author.LastName</a>
+							<a asp-controller="Users" asp-action="Profile" asp-route-userId="@ad.Author.Id">@ad.Author.FirstName @ad.Author.LastName</a>
 							<small class="text-muted">@ad.CreatedOn.ToShortDateString()</small>
 						</div>
 					</div>
@@ -49,7 +66,10 @@
 @section Scripts {
 	<script>
 		$(document).ready(function () {
-			
+			var isSignedIn = $("#is-signed-in").val();
+			if (isSignedIn == "false") {
+				$("#sign-in-btn").removeAttr("hidden");
+			}
 		})
 	</script>
 }

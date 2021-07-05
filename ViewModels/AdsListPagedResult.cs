@@ -11,7 +11,6 @@ namespace CountryhouseService.ViewModels
     public class AdsListPagedResult
     {
         public PagedResult<Ad> Ads { get; set; }
-        public string DefaultPreviewImage { get; set; }
         public string CurrentSortOrder { get; set; }
         public string CurrentSearchString { get; set; }
         public string ShowCurrentUserData { get; set; }

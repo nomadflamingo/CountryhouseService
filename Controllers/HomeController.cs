@@ -33,11 +33,12 @@ namespace CountryhouseService.Controllers
             IQueryable<Ad> ads = _db.Ads.AsNoTracking();
             ads = ads.OrderByDescending(a => a.CreatedOn);
 
-            var adsOnPage = ads.Take(6)
+            var adsOnPage = ads.Take(3)
                 .Include(a => a.Images)
                 .Include(a => a.Status)
                 .Include(a => a.Author).ToList();
 
+            ViewData["IsSignedIn"] = _signInManager.IsSignedIn(User) ? "true" : "false";
             return View(adsOnPage);
         }
 

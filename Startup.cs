@@ -1,5 +1,6 @@
 using CountryhouseService.Data;
 using CountryhouseService.Models;
+using CountryhouseService.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,6 +36,11 @@ namespace CountryhouseService
 
             services.AddControllersWithViews();
             services.AddCloudscribePagination();
+            
+            services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IAdRepository, AdRepository>();
+            services.AddScoped<IStatusRepository, StatusRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
