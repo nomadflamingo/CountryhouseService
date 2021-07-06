@@ -8,7 +8,7 @@
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-route-returnUrl=@returnUrl method="post">
+        <form asp-action="Register" asp-route-returnUrl=@returnUrl enctype="multipart/form-data" method="post">
             <h4>Create a new account.</h4>
             <hr />
             <div asp-validation-summary="All" class="text-danger"></div>
@@ -38,10 +38,11 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AvatarFormFile" class="control-label"></label>
+                <label asp-for="Avatar" class="control-label"></label>
                 <div class="custom-file">
-                    <label for="customImages" class="custom-file-label">Choose Photo</label>
-                    <input id="customImages" asp-for="AvatarFormFile" class="custom-file-input">
+                    <label asp-for="Avatar" class="custom-file-label">Choose Avatar</label>
+                    <input asp-for="Avatar" class="custom-file-input" />
+                    <span asp-validation-for="Avatar" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-check form-check-inline">

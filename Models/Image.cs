@@ -9,10 +9,8 @@ namespace CountryhouseService.Models
     public class Image
     {
         public int Id { get; set; }
-
         [Required]
         public string Source { get; set; }
-        
         public int AdId { get; set; }
 
     }

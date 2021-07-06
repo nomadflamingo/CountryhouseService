@@ -14,10 +14,10 @@ namespace CountryhouseService.Repositories
         Task<IEnumerable<Ad>> GetAllAsync(params Expression<Func<Ad, object>>[] includes);
         Task<Ad> FindByIdAsync(int? id, params Expression<Func<Ad, object>>[] includes);
         Ad Create(AdViewModel adViewModel, List<Image> images, string currentUserId, AdStatus status);
-        Task<PagedResult<Ad>> CreateSearchResult(string sortBy, string searchString, string showCurrentUserData, string userId, int page, int pageSize);
-        Task<int> Add(Ad ad);
-        Task Update(Ad ad);
-        Task Update(Ad ad, AdViewModel adViewModel, List<Image> images);
-        Task Remove(Ad ad);
+        Task<PagedResult<Ad>> CreateSearchResultAsync(string sortBy, string searchString, string showCurrentUserData, string userId, int page, int pageSize);
+        Task<int> AddAsync(Ad ad);
+        Task UpdateAsync(Ad ad);
+        Task UpdateAsync(Ad ad, AdViewModel adViewModel, List<Image> images);
+        Task RemoveAsync(Ad ad);
     }
 }

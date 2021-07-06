@@ -2,7 +2,7 @@
 @{
 	Layout = "~/Views/Shared/_IndexLayout.cshtml";
 	ViewData["Title"] = "Home Page";
-	string defaultPreview = Constants.DefaultAdPreviewSource;
+	string previewImage;
 	string defaultLogo = Constants.DefaultLogoSource;
 	string backgroundImg = Constants.HomeBackground;
 }
@@ -44,10 +44,11 @@
 		<div class="row">
 		@foreach (Ad ad in Model)
 		{
-			if (!ad.UseDefaultImage) defaultPreview = ad.Images.FirstOrDefault().Source;
+			if (!ad.UseDefaultImage) previewImage = ad.Images.FirstOrDefault().Source;
+			else previewImage = Constants.DefaultAdPreviewSource;
 			<div class="col-md-4">
 				<div class="card mb-4 box-shadow">
-					<div class="card-img-top" style="background-image: url('@defaultPreview')">&nbsp;</div>
+					<div class="card-img-top" style="background-image: url('@previewImage')">&nbsp;</div>
 					<div class="card-body">
 						<p class="card-text">@ad.Description</p>
 						<div class="d-flex justify-content-between align-items-center">

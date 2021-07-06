@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,10 +32,19 @@ namespace CountryhouseService
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
             services.AddIdentity<User, IdentityRole>(options => 
-                options.User.AllowedUserNameCharacters = null)
-                .AddEntityFrameworkStores<AppDbContext>();
+            {
+                options.User.AllowedUserNameCharacters = null;
+                options.Password = new PasswordOptions {
+                    RequireDigit = false,
+                    RequiredLength = 6,
+                    RequireLowercase = false,
+                    RequireUppercase = false,
+                    RequireNonAlphanumeric = false,
+                };
+            }).AddEntityFrameworkStores<AppDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options => 
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
             services.AddCloudscribePagination();
             
             services.AddScoped<IImageRepository, ImageRepository>();

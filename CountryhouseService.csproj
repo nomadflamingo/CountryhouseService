@@ -6,6 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\ads\**" />
+    <Compile Remove="wwwroot\users\**" />
+    <Content Remove="wwwroot\ads\**" />
+    <Content Remove="wwwroot\users\**" />
+    <EmbeddedResource Remove="wwwroot\ads\**" />
+    <EmbeddedResource Remove="wwwroot\users\**" />
+    <None Remove="wwwroot\ads\**" />
+    <None Remove="wwwroot\users\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="cloudscribe.Web.Pagination" Version="3.1.0" />
     <PackageReference Include="jQuery" Version="3.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.7" />
@@ -19,11 +30,6 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="5.0.7" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\ads\images\" />
-    <Folder Include="wwwroot\users\avatars\" />
   </ItemGroup>
 
 </Project>

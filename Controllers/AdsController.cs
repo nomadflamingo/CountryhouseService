@@ -59,7 +59,7 @@ namespace CountryhouseService.Controllers
         public async Task<IActionResult> Index(string sortBy, string searchString, string showCurrentUserData, int page = 1, int pageSize = 5)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            PagedResult<Ad> pagedResult = await _adRepository.CreateSearchResult(sortBy, searchString, showCurrentUserData, userId, page, pageSize);
+            PagedResult<Ad> pagedResult = await _adRepository.CreateSearchResultAsync(sortBy, searchString, showCurrentUserData, userId, page, pageSize);
             
             AdsListPagedResult result = new AdsListPagedResult
             {
@@ -96,10 +96,11 @@ namespace CountryhouseService.Controllers
 
 
                 Ad newAd = _adRepository.Create(adViewModel, images, currentUserId, status);
-                int newAdId = await _adRepository.Add(newAd);
+                int newAdId = await _adRepository.AddAsync(newAd);
 
                 TempData["isSuccess"] = "true";
                 ViewData["AdId"] = newAdId;
+                ModelState.Clear();
                 return View();
             }
             return View(adViewModel);
@@ -120,13 +121,14 @@ namespace CountryhouseService.Controllers
                         _imageRepository.RemoveRange(ad.Images);
                     }
 
-                    await _adRepository.Remove(ad);
+                    await _adRepository.RemoveAsync(ad);
                 }
             }
             return RedirectToAction("Index");
         }
 
         [HttpGet]
+        [Authorize(Roles = "Owner")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id != null && id > 0)
@@ -135,11 +137,6 @@ namespace CountryhouseService.Controllers
                 Ad ad = await _adRepository.FindByIdAsync(id,
                     a => a.Images,
                     a => a.Author);
-                //Ad ad = await _db.Ads
-                //    .Where(a => a.Id == id)
-                //    .Include(a => a.Images)
-                //    .Include(a => a.Author)
-                //    .FirstOrDefaultAsync();
 
                 if (ad != null && ad.AuthorId == currentUserId)
                 {
@@ -162,6 +159,7 @@ namespace CountryhouseService.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Owner")]
         public async Task<IActionResult> Edit(EditAdViewModel adViewModel)
         {
             if (ModelState.IsValid)
@@ -187,7 +185,7 @@ namespace CountryhouseService.Controllers
                             images = await _imageRepository.SaveRangeAsync(adViewModel.Images);
                         }
 
-                        await _adRepository.Update(ad, adViewModel, images);
+                        await _adRepository.UpdateAsync(ad, adViewModel, images);
 
                         TempData["isSuccess"] = "true";
                         return View(adViewModel);

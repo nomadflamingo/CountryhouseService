@@ -34,14 +34,6 @@ namespace CountryhouseService.Repositories
             return ads;
         }
 
-        //public async Task<IEnumerable<Ad>> GetAllAdsAsNoTrackingAsync()
-        //{
-        //    return await _db.Ads.AsNoTracking()
-        //        .Include(a => a.Images)
-        //        .Include(a => a.Status)
-        //        .Include(a => a.Author)
-        //        .ToListAsync();
-        //}
 
         public async Task<Ad> FindByIdAsync(int? id, params Expression<Func<Ad, object>>[] includes)
         {
@@ -51,29 +43,8 @@ namespace CountryhouseService.Repositories
             return ad;
         }
 
-        //public async Task<Ad> FindAdAsNoTrackingByIdAsync(int? id)
-        //{
-        //    Ad ad = await _db.Ads.AsNoTracking()
-        //            .Where(a => a.Id == id)
-        //            .Include(a => a.Images)
-        //            .Include(a => a.Author)
-        //            .FirstOrDefaultAsync();
 
-        //    return ad;
-        //}
-
-
-
-        //public async Task<Ad> FindAdWithImagesByIdAsync(int? id)
-        //{
-        //    Ad ad = await _db.Ads
-        //        .Include(a => a.Images)
-        //        .FirstOrDefaultAsync(a => a.Id == id);
-
-        //    return ad;
-        //}
-
-        public async Task<PagedResult<Ad>> CreateSearchResult(
+        public async Task<PagedResult<Ad>> CreateSearchResultAsync(
             string sortBy, 
             string searchString, 
             string showCurrentUserData,
@@ -157,20 +128,20 @@ namespace CountryhouseService.Repositories
         }
 
 
-        public async Task<int> Add(Ad ad)
+        public async Task<int> AddAsync(Ad ad)
         {
             await _db.Ads.AddAsync(ad);
             await _db.SaveChangesAsync();
             return ad.Id;
         }
 
-        public async Task Update(Ad ad)
+        public async Task UpdateAsync(Ad ad)
         {
             _db.Ads.Update(ad);
             await _db.SaveChangesAsync();
         }
 
-        public async Task Update(Ad ad, 
+        public async Task UpdateAsync(Ad ad, 
             AdViewModel adViewModel,
             List<Image> images)
         {
@@ -187,10 +158,10 @@ namespace CountryhouseService.Repositories
             ad.FromDate = adViewModel.FromDate;
             ad.UntilDate = adViewModel.UntilDate;
 
-            await Update(ad);
+            await UpdateAsync(ad);
         }
 
-        public async Task Remove(Ad ad)
+        public async Task RemoveAsync(Ad ad)
         {
             _db.Ads.Remove(ad);
             await _db.SaveChangesAsync();
