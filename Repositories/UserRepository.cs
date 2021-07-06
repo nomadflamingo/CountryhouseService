@@ -38,6 +38,11 @@ namespace CountryhouseService.Repositories
             await _signInManager.SignOutAsync();
         }
 
+        public async Task<IdentityResult> CreateAsync(User user, string password)
+        {
+            return await _userManager.CreateAsync(user, password);
+        }
+
         public class CreatedUserInfo
         {
             public IdentityResult Result { get; set; }
@@ -53,7 +58,7 @@ namespace CountryhouseService.Repositories
                 LastName = registerModel.LastName,
                 Email = registerModel.Email,
             };
-            IdentityResult result = await _userManager.CreateAsync(user, registerModel.Password);
+            IdentityResult result = await CreateAsync(user, registerModel.Password);
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, registerModel.Role);

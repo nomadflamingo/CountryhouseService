@@ -15,6 +15,7 @@ namespace CountryhouseService.Repositories
         Task<User> GetSignedInUserAsync(ClaimsPrincipal user);
         Task<SignInResult> SignInAsync(string email, string password);
         Task SignOutAsync();
+        Task<IdentityResult> CreateAsync(User user, string password);
         Task<CreatedUserInfo> CreateAsync(RegisterViewModel registerModel);
         Task AddAvatarAsync(User user, Image avatar);
         Task UpdateAsync(User user);

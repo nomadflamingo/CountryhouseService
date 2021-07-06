@@ -19,7 +19,6 @@ namespace CountryhouseService.Repositories
         public AdRepository(AppDbContext db)
         {
             _db = db;
-
         }
 
         private IQueryable<Ad> GetAllAsQuery(params Expression<Func<Ad, object>>[] includes)
@@ -37,12 +36,9 @@ namespace CountryhouseService.Repositories
 
         public async Task<Ad> FindByIdAsync(int? id, params Expression<Func<Ad, object>>[] includes)
         {
-            IQueryable<Ad> ads = GetAllAsQuery(includes);
-            Ad ad = await ads.Where(a => a.Id == id).FirstOrDefaultAsync();
-
+            Ad ad = await GetAllAsQuery(includes).Where(a => a.Id == id).FirstOrDefaultAsync();
             return ad;
         }
-
 
         public async Task<PagedResult<Ad>> CreateSearchResultAsync(
             string sortBy, 
@@ -53,7 +49,6 @@ namespace CountryhouseService.Repositories
             int pageSize)
         {
             IQueryable<Ad> ads = GetAllAsQuery(
-                a => a.Images,
                 a => a.Author,
                 a => a.Status);
 
@@ -101,7 +96,14 @@ namespace CountryhouseService.Repositories
             return pagedResult;
         }
 
-        public Ad Create(AdViewModel adViewModel,
+        public async Task<int> CreateAsync(Ad ad)
+        {
+            await _db.Ads.AddAsync(ad);
+            await _db.SaveChangesAsync();
+            return ad.Id;
+        }
+
+        public async Task<int> CreateAsync(AdViewModel adViewModel,
             List<Image> images,
             string currentUserId,
             AdStatus status)
@@ -124,15 +126,7 @@ namespace CountryhouseService.Repositories
                 FromDate = adViewModel.FromDate,
                 UntilDate = adViewModel.UntilDate,
             };
-            return newAd;
-        }
-
-
-        public async Task<int> AddAsync(Ad ad)
-        {
-            await _db.Ads.AddAsync(ad);
-            await _db.SaveChangesAsync();
-            return ad.Id;
+            return await CreateAsync(newAd);
         }
 
         public async Task UpdateAsync(Ad ad)
@@ -165,6 +159,20 @@ namespace CountryhouseService.Repositories
         {
             _db.Ads.Remove(ad);
             await _db.SaveChangesAsync();
+        }
+
+
+        public async Task LoadImagesAsync(Ad ad)
+        {
+            await _db.Entry(ad).Collection(a => a.Images).LoadAsync();
+        }
+
+        public async Task LoadImagesAsync(List<Ad> ads)
+        {
+            foreach (Ad ad in ads)
+            {
+                await LoadImagesAsync(ad);
+            }
         }
     }
 }

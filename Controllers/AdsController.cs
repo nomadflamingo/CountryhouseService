@@ -39,16 +39,16 @@ namespace CountryhouseService.Controllers
         {
             if (id != null && id > 0)
             {
-                Ad ad = await _adRepository.FindByIdAsync(id,
-                    a => a.Images,
-                    a => a.Author);
+                Ad ad = await _adRepository.FindByIdAsync(id, a => a.Author);
+
+                await _adRepository.LoadImagesAsync(ad);
 
                 if (ad != null)
                 {
                     AdPagedResult result = new AdPagedResult
                     {
                         Ad = ad,
-                        IsCurrentUserAd = User.FindFirstValue(ClaimTypes.NameIdentifier) == ad.AuthorId ? "true" : "false",
+                        IsCurrentUserAd = (User.FindFirstValue(ClaimTypes.NameIdentifier) == ad.AuthorId).ToString(),
                     };
                     return View(result);
                 }
@@ -60,7 +60,8 @@ namespace CountryhouseService.Controllers
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             PagedResult<Ad> pagedResult = await _adRepository.CreateSearchResultAsync(sortBy, searchString, showCurrentUserData, userId, page, pageSize);
-            
+            await _adRepository.LoadImagesAsync(pagedResult.Data);
+
             AdsListPagedResult result = new AdsListPagedResult
             {
                 Ads = pagedResult,
@@ -95,8 +96,7 @@ namespace CountryhouseService.Controllers
                 }
 
 
-                Ad newAd = _adRepository.Create(adViewModel, images, currentUserId, status);
-                int newAdId = await _adRepository.AddAsync(newAd);
+                int newAdId = await _adRepository.CreateAsync(adViewModel, images, currentUserId, status);
 
                 TempData["isSuccess"] = "true";
                 ViewData["AdId"] = newAdId;
@@ -113,7 +113,8 @@ namespace CountryhouseService.Controllers
             if (id != null && id > 0)
             {
                 string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                Ad ad = await _adRepository.FindByIdAsync(id, a => a.Images);
+                Ad ad = await _adRepository.FindByIdAsync(id);
+                await _adRepository.LoadImagesAsync(ad);
                 if (ad != null && ad.AuthorId == currentUserId)
                 {
                     if (ad.Images != null)
@@ -134,9 +135,8 @@ namespace CountryhouseService.Controllers
             if (id != null && id > 0)
             {
                 string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                Ad ad = await _adRepository.FindByIdAsync(id,
-                    a => a.Images,
-                    a => a.Author);
+                Ad ad = await _adRepository.FindByIdAsync(id, a => a.Author);
+                await _adRepository.LoadImagesAsync(ad);
 
                 if (ad != null && ad.AuthorId == currentUserId)
                 {
@@ -168,9 +168,8 @@ namespace CountryhouseService.Controllers
                 {
                     string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                    Ad ad = await _adRepository.FindByIdAsync(adViewModel.Id,
-                        a => a.Images,
-                        a => a.Author);
+                    Ad ad = await _adRepository.FindByIdAsync(adViewModel.Id, a => a.Author);
+                    await _adRepository.LoadImagesAsync(ad);
 
                     if (ad != null && ad.AuthorId == currentUserId)
                     {
