@@ -2,32 +2,100 @@
 @{
     ViewData["Title"] = Model.Ad.Title;
 }
-<input hidden id="is-current-user" value="@Model.IsCurrentUserAd" />
-<h1>@Model.Ad.Title</h1>
-<p>@Model.Ad.Description</p>
-<a asp-controller="Users" asp-action="Profile" asp-route-userId="@Model.Ad.AuthorId">@Model.Ad.Author.FirstName @Model.Ad.Author.LastName</a>
-<p>@Model.Ad.Budget</p>
-<p>@Model.Ad.UpdatedOn.ToShortDateString()</p>
-<p>@Model.Ad.CreatedOn.ToShortDateString()</p>
-@foreach (Image img in Model.Ad.Images)
-{
-	<p>
-		<img src="@img.Source" />
-	</p>
-}
-<a hidden class="btn btn-primary" id="edit-button" asp-controller="Ads" asp-action="Edit" asp-route-id="@Model.Ad.Id">Edit</a>
-<a hidden class="btn btn-danger" id="delete-button" asp-controller="Ads" asp-action="Delete" asp-route-id="@Model.Ad.Id">Delete</a>
+<style>
+	.description {
+		word-wrap: break-word;
+	}
+</style>
+
+<div class="container">
+	<h3 class="display-4">Ad details</h3>
+	<div class="row">
+		<div class="col-md-6">
+			<div id="image-carousel" class="carousel slide" data-ride="carousel">
+				<ol class="carousel-indicators">
+					@for (int i = 0; i < Model.Ad.Images.Count(); i++)
+					{
+						<li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i==0 ? "active" : "") "></li>
+					}
+				</ol>
+				<div class="carousel-inner">
+					@if (!Model.Ad.UseDefaultImage)
+					{
+						@for (int i = 0; i < Model.Ad.Images.Count(); i++)
+						{
+							<div class="@(i == 0 ? "carousel-item active" : "carousel-item") ">
+								<img class="d-block w-100" src="@Model.Ad.Images[i].Source" alt="...">
+							</div>
+						}
+					}
+					else
+					{
+						<div class="carousel-item active">
+							<img class="d-block w-100" src="@Constants.DefaultAdPreviewSource" alt="...">
+						</div>
+					}
+				</div>
+				<a class="carousel-control-prev" href="#image-carousel" role="button" data-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="sr-only">Previous</span>
+				</a>
+				<a class="carousel-control-next" href="#image-carousel" role="button" data-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="sr-only">Next</span>
+				</a>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>@Model.Ad.Title</h1>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 text-primary">
+					<span class="label label-primary">Owner: </span>
+					<span class="monospaced">@Model.Ad.Author.FirstName @Model.Ad.Author.LastName</span>
+				</div>
+			</div>
+
+			<div class="row mb-auto">
+				<div class="col-md-12">
+					<p class="description">
+						@Model.Ad.Description
+					</p>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-4">
+					<a class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+						Contact Owner
+					</a>
+				</div>
+			</div>
+
+			<hr />
+
+			<ul class="list-group">
+				<li class="list-group-item"><span class="font-weight-bold">Address - </span> @Model.Ad.Address</li>
+				<li class="list-group-item"><span class="font-weight-bold">Contact Number - </span> @Model.Ad.ContactNumber</li>
+			</ul>
+		</div>
+	</div>
+</div>
 
 @section Scripts {
-    <script>
+	<script>
 		$(document).ready(function () {
 			var isCurrentUser = $("#is-current-user").val();
 			if (isCurrentUser == "true") {
 				$("#edit-button").removeAttr("hidden");
 				$("#delete-button").removeAttr("hidden");
 			}
-        })
-    </script>
+		})
+	</script>
 }
 
 

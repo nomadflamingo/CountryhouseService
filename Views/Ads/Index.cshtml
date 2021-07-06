@@ -5,6 +5,15 @@
     ViewData["Controller"] = "Ads";
     string previewImage;
 }
+<style>
+	.ad-description {
+		word-wrap: break-word;
+		max-height: 100px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+</style>
+
 <h1>Index</h1>
 <div class="col-12"><a asp-action="Create" class="btn btn-primary">Create Ad</a></div>
 <form class="form-inline" asp-action="Index" method="get">
@@ -50,7 +59,7 @@
                             }
                             End Until: @ad.UntilDate.ToShortDateString()
                         </div>
-                        <p class="mb-auto">@ad.Description</p>
+                        <p class="ad-description">@ad.Description</p>
                         <p>Price = @ad.Budget.ToString("c")</p>
                         <a asp-controller="Users" asp-action="Profile" asp-route-userId="@ad.Author.Id">@ad.Author.FirstName @ad.Author.LastName</a>
                         <a href="/Ads/@ad.Id">Read more</a>
