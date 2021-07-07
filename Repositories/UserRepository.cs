@@ -20,6 +20,11 @@ namespace CountryhouseService.Repositories
             _signInManager = signInManager;
         }
 
+        public bool IsSignedIn(ClaimsPrincipal user)
+        {
+            return _signInManager.IsSignedIn(user);
+        }
+
         public async Task<User> GetSignedInUserAsync(ClaimsPrincipal user)
         {
             User currentUser = await _userManager.GetUserAsync(user);

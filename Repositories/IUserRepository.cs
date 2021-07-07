@@ -12,6 +12,7 @@ namespace CountryhouseService.Repositories
 {
     public interface IUserRepository
     {
+        bool IsSignedIn(ClaimsPrincipal user);
         Task<User> GetSignedInUserAsync(ClaimsPrincipal user);
         Task<SignInResult> SignInAsync(string email, string password);
         Task SignOutAsync();

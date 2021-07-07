@@ -45,12 +45,13 @@ namespace CountryhouseService.Controllers
                 if (ad != null)
                 {
                     await _adRepository.LoadImagesAsync(ad);
-                    User user = await _userRepository.GetSignedInUserAsync(User);
+                    User user = null;
+                    if (_userRepository.IsSignedIn(User)) user = await _userRepository.GetSignedInUserAsync(User);
                     AdPagedResult result = new AdPagedResult
                     {
                         Ad = ad,
-                        UserRole = (await _userRepository.GetRolesAsync(user) as List<string>).First(),
-                        IsCurrentUser = (user.Id == ad.AuthorId).ToString(),
+                        UserRole = user != null ? (await _userRepository.GetRolesAsync(user) as List<string>).First() : null,
+                        IsCurrentUser = (user?.Id == ad.AuthorId).ToString(),
                     };
                     return View(result);
                 }
@@ -169,9 +170,7 @@ namespace CountryhouseService.Controllers
                 if (adViewModel.Id > 0)
                 {
                     string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
                     Ad ad = await _adRepository.FindByIdAsync(adViewModel.Id, a => a.Author);
-
                     if (ad != null && ad.AuthorId == currentUserId)
                     {
                         await _adRepository.LoadImagesAsync(ad);
