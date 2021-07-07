@@ -38,6 +38,12 @@ namespace CountryhouseService.Repositories
             await _signInManager.SignOutAsync();
         }
 
+        public async Task<IEnumerable<string>> GetRolesAsync(User user)
+        {
+            IEnumerable<string> roles = await _userManager.GetRolesAsync(user);
+            return roles;
+        }
+
         public async Task<IdentityResult> CreateAsync(User user, string password)
         {
             return await _userManager.CreateAsync(user, password);

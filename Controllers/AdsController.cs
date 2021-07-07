@@ -41,14 +41,16 @@ namespace CountryhouseService.Controllers
             {
                 Ad ad = await _adRepository.FindByIdAsync(id, a => a.Author);
 
-                await _adRepository.LoadImagesAsync(ad);
 
                 if (ad != null)
                 {
+                    await _adRepository.LoadImagesAsync(ad);
+                    User user = await _userRepository.GetSignedInUserAsync(User);
                     AdPagedResult result = new AdPagedResult
                     {
                         Ad = ad,
-                        IsCurrentUserAd = (User.FindFirstValue(ClaimTypes.NameIdentifier) == ad.AuthorId).ToString(),
+                        UserRole = (await _userRepository.GetRolesAsync(user) as List<string>).First(),
+                        IsCurrentUser = (user.Id == ad.AuthorId).ToString(),
                     };
                     return View(result);
                 }
@@ -114,9 +116,9 @@ namespace CountryhouseService.Controllers
             {
                 string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Ad ad = await _adRepository.FindByIdAsync(id);
-                await _adRepository.LoadImagesAsync(ad);
                 if (ad != null && ad.AuthorId == currentUserId)
                 {
+                    await _adRepository.LoadImagesAsync(ad);
                     if (ad.Images != null)
                     {
                         _imageRepository.RemoveRange(ad.Images);
@@ -136,10 +138,10 @@ namespace CountryhouseService.Controllers
             {
                 string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 Ad ad = await _adRepository.FindByIdAsync(id, a => a.Author);
-                await _adRepository.LoadImagesAsync(ad);
 
                 if (ad != null && ad.AuthorId == currentUserId)
                 {
+                    await _adRepository.LoadImagesAsync(ad);
                     AdViewModel result = new EditAdViewModel
                     {
                         Id = ad.Id,
@@ -169,10 +171,10 @@ namespace CountryhouseService.Controllers
                     string currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                     Ad ad = await _adRepository.FindByIdAsync(adViewModel.Id, a => a.Author);
-                    await _adRepository.LoadImagesAsync(ad);
 
                     if (ad != null && ad.AuthorId == currentUserId)
                     {
+                        await _adRepository.LoadImagesAsync(ad);
                         if (ad.Images != null)
                         {
                             _imageRepository.RemoveRange(ad.Images);

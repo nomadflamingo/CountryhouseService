@@ -55,8 +55,10 @@
 
 			<div class="row">
 				<div class="col-md-12 text-primary">
-					<span class="label label-primary">Owner: </span>
-					<span class="monospaced">@Model.Ad.Author.FirstName @Model.Ad.Author.LastName</span>
+					<a asp-controller="Users" asp-action="Profile" asp-route-userId="@Model.Ad.AuthorId">
+						<span class="label label-primary">Owner: </span>
+						<span class="monospaced">@Model.Ad.Author.FirstName @Model.Ad.Author.LastName</span>
+					</a>
 				</div>
 			</div>
 
@@ -68,17 +70,24 @@
 				</div>
 			</div>
 
+			<input hidden id="user-role" value="@Model.UserRole" />
+			<input hidden id="is-current-user" value="@Model.IsCurrentUser" />
 			<div class="row">
 				<div class="col-md-4">
-					<a class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+					<a hidden id="contact-owner-button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
 						Contact Owner
 					</a>
+					<div hidden class="btn-group" role="group" id="edit-btn-group">
+						<a class="btn btn-outline-primary" asp-controller="Ads" asp-action="Edit" asp-route-id="@Model.Ad.Id">Edit</a>
+						<a class="btn btn-outline-danger" asp-controller="Ads" asp-action="Delete" asp-route-id="@Model.Ad.Id">Delete</a>
+					</div>
 				</div>
 			</div>
 
 			<hr />
 
 			<ul class="list-group">
+				<li class="list-group-item"><span class="font-weight-bold">Budget - </span> @Model.Ad.Budget.ToString("c")</li>
 				<li class="list-group-item"><span class="font-weight-bold">Address - </span> @Model.Ad.Address</li>
 				<li class="list-group-item"><span class="font-weight-bold">Contact Number - </span> @Model.Ad.ContactNumber</li>
 			</ul>
@@ -89,10 +98,19 @@
 @section Scripts {
 	<script>
 		$(document).ready(function () {
-			var isCurrentUser = $("#is-current-user").val();
-			if (isCurrentUser == "true") {
-				$("#edit-button").removeAttr("hidden");
-				$("#delete-button").removeAttr("hidden");
+			var userRole = $("#user-role").val();
+			switch (userRole) {
+				case "Owner":
+					var isCurrentUser = $("#is-current-user").val();
+					if (isCurrentUser == "True") {
+						$("#edit-btn-group").removeAttr("hidden");
+					}
+					break;
+				case "Contractor":
+					$("#contact-owner-button").removeAttr("hidden");
+					break;
+				default:
+					break;
 			}
 		})
 	</script>

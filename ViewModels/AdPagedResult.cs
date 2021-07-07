@@ -9,6 +9,7 @@ namespace CountryhouseService.ViewModels
     public class AdPagedResult
     {
         public Ad Ad { get; set; }
-        public string IsCurrentUserAd { get; set; }
+        public string UserRole { get; set; }
+        public string IsCurrentUser { get; set; }
     }
 }
